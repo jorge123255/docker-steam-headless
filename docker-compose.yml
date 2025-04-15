@@ -9,7 +9,9 @@ services:
     privileged: true
     shm_size: 2G
     ipc: host
-    network_mode: host
+    networks:
+      br0:
+        ipv4_address: 192.168.1.9
     environment:
       - TZ=America/New_York
       - USER_LOCALES=en_US.UTF-8 UTF-8
@@ -38,4 +40,10 @@ services:
         reservations:
           devices:
             - capabilities: [gpu]
-              device_ids: ["all"] 
+              device_ids: ["all"]
+
+# Define the custom network
+networks:
+  br0:
+    external: true
+    name: br0 
