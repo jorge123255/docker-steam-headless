@@ -74,3 +74,41 @@ For a development environment, I have created a script in the devops directory.
 - Document how to run this container:
     - Other server OS
     - TrueNAS Scale 
+
+# Steam Headless for Unraid
+
+This repository contains the configuration for running Steam Headless on Unraid.
+
+## Installation Instructions
+
+1. In Unraid, go to the "Apps" tab
+2. Search for "steam-headless"
+3. Click "Install" or "Actions > Install" from the search results
+
+## GPU Support
+
+### NVIDIA
+1. Install the [Nvidia-Driver Plugin](https://forums.unraid.net/topic/98978-plugin-nvidia-driver/) by ich777
+2. In the steam-headless container template:
+   - Toggle to "Advanced View"
+   - Add `--runtime=nvidia` to the "Extra Parameters" field
+   - If you have multiple NVIDIA GPUs, set the correct GPU UUID in the `NVIDIA_VISIBLE_DEVICES` variable
+
+### AMD
+1. Install the [Radeon-Top Plugin](https://forums.unraid.net/topic/92865-support-ich777-amd-vendor-reset-coraltpu-hpsahba/) by ich777
+
+## Controller Support
+1. Install the "uinput" plugin from the Apps tab
+2. Ensure the container's "Network Type" is set to "host"
+
+## Volume Mappings
+- `/mnt/user/steam-headless/home` → `/home/default`
+- `/mnt/user/steam-headless/games` → `/mnt/games`
+
+## Environment Variables
+- `TZ`: Timezone (default: America/New_York)
+- `USER_PASSWORD`: Password for the default user (change this!)
+- `WEB_UI_MODE`: Set to "vnc" for web access
+- `PORT_NOVNC_WEB`: Web UI port (default: 8083)
+- `ENABLE_STEAM`: Set to "true" to enable Steam
+- `ENABLE_SUNSHINE`: Set to "true" for Moonlight streaming support

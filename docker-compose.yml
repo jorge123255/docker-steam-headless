@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  steam-headless:
+    build:
+      context: .
+      dockerfile: Dockerfile.debian
+    restart: unless-stopped
+    privileged: true
+    shm_size: 2G
+    ipc: host
+    network_mode: host
+    environment:
+      - TZ=America/New_York
+      - USER_LOCALES=en_US.UTF-8 UTF-8
+      - DISPLAY=:55
+      - PUID=1000
+      - PGID=1000
+      - UMASK=000
+      - USER_PASSWORD=password  # Change this
+      - MODE=primary
+      - WEB_UI_MODE=vnc
+      - ENABLE_VNC_AUDIO=true
+      - PORT_NOVNC_WEB=8083
+      - ENABLE_STEAM=true
+      - STEAM_ARGS=-silent
+      - ENABLE_SUNSHINE=true
+      - ENABLE_EVDEV_INPUTS=true
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - NVIDIA_VISIBLE_DEVICES=all
+    volumes:
+      - /mnt/user/steam-headless/home:/home/default:rw
+      - /mnt/user/steam-headless/games:/mnt/games:rw
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - /dev/input:/dev/input:ro
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+              device_ids: ["all"] 
